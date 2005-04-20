@@ -1,0 +1,43 @@
+# Numbering convention follows XML as it 
+# exists at the moment
+# N.B. DCMs, CMs and Harp feeds number from 0
+# LO2s and Corrtasks numbers from 1 
+#
+# RxA can be wired to at most 4 DCMs
+# One mixer of B or W can be wired to at most 4 DCMs
+# One harp feed goes to at most 2 DCMs
+
+#Recep. HARP QUAD LO2 DCM_ID CM_ID Corrtask
+
+A       H00  0   1   0      0     1 
+A       H00  0   2   1      1     1 
+A       H01  0   3   2      2     1 
+A       H01  0   4   3      3     1   
+BA      H02  0   1   4      4     2 
+BA      H02  0   2   5      5     2
+BA      H03  0   3   6      6     2 
+BA      H03  0   4   7      7     2 
+--      H04  1   1   8      8     3
+--      H04  1   2   9      9     3
+--      H05  1   3  10     10     3 
+--      H05  1   4  11     11     3
+BB      H06  1   1  12     12     4 
+BB      H06  1   2  13     13     4
+BB      H07  1   3  14     14     4
+BB      H07  1   4  15     15     4 
+WA      H08  2   1  16     16     5
+WA      H08  2   2  17     17     5 
+WA      H09  2   3  18     18     5
+WA      H09  2   4  19     19     5
+--      H10  2   1  20     20     6
+--      H10  2   2  21     21     6     
+--      H11  2   3  22     22     6 
+--      H11  2   4  23     23     6 
+WB      H12  3   1  24     24     7 
+WB      H12  3   2  25     25     7
+WB      H13  3   3  26     26     7
+WB      H13  3   4  27     27     7
+--      H14  3   1  28     28     8 
+--      H14  3   2  29     29     8
+--      H15  3   3  30     30     8
+--      H15  3   4  31     31     8
