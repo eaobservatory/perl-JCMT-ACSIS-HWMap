@@ -101,6 +101,7 @@ A new mapping can be stored (over-writing previous mapping).
 Each CM is specified by a hash with the following keys:
 
   RECEPTORS: Reference to array of receptor IDs
+  SB_MODES : Reference to corresponding array of subband mode numbers
   QUADRANT
   LO2
   CM_ID
@@ -125,14 +126,15 @@ sub cm_map {
 
 =item B<receptor>
 
-Return the CM mapping for a specified receptor ID. Returns undef if
-the receptor is not available. 
+Return the CM mapping for a specified receptor ID. Returns empty list if
+the receptor is not available.
 
   @cm = $map->receptor( "H01" );
 
 Can return multiple hardware mappings for a single pixel. They are returned
 in CM_ID order. Each element in the returned list is a reference to a hash
-with keys identical to those defined by the C<cm_map> documentation.
+with keys identical to those defined by the C<cm_map> documentation except
+that the SB_MODES and RECEPTORS keys will refer to single element arrays.
 
 =cut
 
@@ -148,10 +150,18 @@ sub receptor {
   my @match;
   for my $cm (@map) {
     my @receptors = @{ $cm->{RECEPTORS} };
-    print "Got receptors: @receptors\n";
-    if (grep { $_ eq $receptor } @receptors) {
-      push(@match, $cm);
-    }
+
+    # need to check each in turn so that we can fix up the SB_MODE array as well
+    RECEPTORS: for my $i (0..$#receptors) {
+	if ($receptors[$i] eq $receptor) {
+	  # take a copy of the hash (so we do not edit the object version)
+	  my %map = %$cm;
+	  $map{RECEPTORS} = [ $receptor ];
+	  $map{SB_MODES}  = [ $cm->{SB_MODES}->[$i] ];
+	  push(@match, \%map);
+	  last RECEPTORS;
+	}
+      }
   }
   return @match;
 }
@@ -236,16 +246,26 @@ sub _import_string {
     next unless $line =~ /\w/;
     next if $line =~ /^\s*\#/;
 
-    my ($rec,$hrec, $q, $lo, $dcmid, $cmid, $task) = split(/\s+/,$line);
+    # strip spaces from end of line
+    $line =~ s/\s+$//;
+
+    my ($rec,$hrec, $q, $lo, $dcmid, $cmid, $task, $sbm, $hsbm) = split(/\s+/,$line);
+
+    # Subband mode is really HARP dependent so we can fall back
+    $sbm = ( $rec ne '--' ? 8 : '--' ) unless defined $sbm;
+    $hsbm = ( $hrec ne '--' ? 2 : '--' ) unless defined $hsbm;
 
     # A '--' indicates that no receptor is defined
     my @receptors = grep { $_ ne '--'} ($rec, $hrec);
+    my @sbmodes   = grep { $_ ne '--'} ($sbm, $hsbm);
+
 
     # CM is the unique quantity in the mapping and so can be treated
     # as the index into an array
 
     $cm[$cmid] = {
 		  RECEPTORS => \@receptors,
+		  SB_MODES => \@sbmodes,
 		  QUADRANT => $q,
 		  LO2 => $lo,
 		  DCM_ID => $dcmid,
