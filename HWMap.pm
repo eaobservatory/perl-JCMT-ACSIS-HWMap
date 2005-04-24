@@ -252,7 +252,7 @@ sub _import_string {
     my ($rec,$hrec, $q, $lo, $dcmid, $cmid, $task, $sbm, $hsbm) = split(/\s+/,$line);
 
     # Subband mode is really HARP dependent so we can fall back
-    $sbm = ( $rec ne '--' ? 8 : '--' ) unless defined $sbm;
+    $sbm = ( $rec ne '--' ? 4 : '--' ) unless defined $sbm;
     $hsbm = ( $hrec ne '--' ? 2 : '--' ) unless defined $hsbm;
 
     # A '--' indicates that no receptor is defined
