@@ -219,7 +219,7 @@ sub _import_file {
   close($fh) or croak "Error closing mapping file $file: $!";
 
   $self->_import_string( $contents );
-
+  $self->filename( $file );
 }
 
 =item B<_import_string>
