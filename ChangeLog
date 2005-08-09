@@ -1,0 +1,5 @@
+2005-08-09  Tim Jenness  <timj@jach.hawaii.edu>
+
+	* HWMap.pm (receptor): Filter out undefined values before mapping
+	CM to different columns. Otherwise undef is translated to 0.
+

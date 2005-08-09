@@ -177,12 +177,14 @@ For RECEPTORS, the resulting list will be references to arrays since
 a single CM_ID can refer to multiple receptors. For the key definitions
 see the C<cm_map> documentation.
 
+Any C<undef>s are removed from the input list.
+
 =cut
 
 sub bycmid {
   my $self = shift;
   my $key = shift;
-  my @reqids = @_;
+  my @reqids = grep { defined $_ } @_;
 
   # get all the mappings
   my @cm = $self->cm_map;
