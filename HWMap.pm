@@ -291,8 +291,6 @@ sub _import_string {
     chomp($line);
     next unless $line =~ /\w/;
 
-    print "Line: $line\n";
-
     # Spot Revision (be careful not to make CVS think this looks like a $Revision tag)
     if ($line =~ /\$Revision: (\d+\.\d+) /) {
       $self->map_version( $1 );
