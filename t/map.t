@@ -36,5 +36,5 @@ my @corrtasks = $map->bycmid( 'CorrTask', keys %uniq);
 @corrtasks = keys %uniq;
 is(@corrtasks, 2, "Count number of corrtasks used for RxB");
 is($corrtasks[0], 1, "First corrtask");
-is(@corrtasks[1], 5, "Second corrtask");
+is($corrtasks[1], 5, "Second corrtask");
 
