@@ -1,5 +1,18 @@
-# Numbering convention follows XML as it 
-# exists at the moment
+# This is the ACSIS hardware map
+
+# Columns are:
+
+# CM_ID
+# DCM_ID
+# Quadrant
+# LO2
+# Correlator Task number
+# Sideband mode for non-HARP receptors
+# Sideband mode for HARP
+# HARP receptor name
+# Additional non-HARP receptors
+
+# Numbering convention follows XML as it exists at the moment
 # N.B. DCMs, CMs and Harp feeds number from 0
 # LO2s and Corrtasks numbers from 1 
 #
@@ -7,37 +20,55 @@
 # One mixer of B or W can be wired to at most 4 DCMs
 # One harp feed goes to at most 2 DCMs
 
-#Recep. HARP QUAD LO2 DCM_ID CM_ID Corrtask
+# Note that the CM_ID column has to be unique. If more than one receptor
+# is connected to the CM_ID they should all be listed in the same row
+# The CM_ID is listed first to indicate its primacy.
 
-A       H00  0   1   0      0     1 
-A       H00  0   2   1      1     1 
-A       H01  0   3   2      2     1 
-A       H01  0   4   3      3     1   
-BA      H02  0   1   4      4     2 
-BA      H02  0   2   5      5     2
-BA      H03  0   3   6      6     2 
-BA      H03  0   4   7      7     2 
---      H04  1   1   8      8     3
---      H04  1   2   9      9     3
---      H05  1   3  10     10     3 
---      H05  1   4  11     11     3
-BB      H06  1   1  12     12     4 
-BB      H06  1   2  13     13     4
-BB      H07  1   3  14     14     4
-BB      H07  1   4  15     15     4 
-WA      H08  2   1  16     16     5
-WA      H08  2   2  17     17     5 
-WA      H09  2   3  18     18     5
-WA      H09  2   4  19     19     5
---      H10  2   1  20     20     6
---      H10  2   2  21     21     6     
---      H11  2   3  22     22     6 
---      H11  2   4  23     23     6 
-WB      H12  3   1  24     24     7 
-WB      H12  3   2  25     25     7
-WB      H13  3   3  26     26     7
-WB      H13  3   4  27     27     7
---      H14  3   1  28     28     8 
---      H14  3   2  29     29     8
---      H15  3   3  30     30     8
---      H15  3   4  31     31     8
+# Arbitrary numbers of receptors can be specified at the end of each line.
+
+# The non-HARP sideband mode will be ignored if no non-HARP receptor
+# is associated with that ID (any value is allowed in that case but some
+# value should be present).
+
+# This CVS revision will be read by the parser.
+# $Revision$
+
+# $Log$
+# Revision 0.2  2005/08/10 13:55:08  timj
+# new format. Allows multiple non-HARP receptors per cm_id
+#
+
+#CM_ID DCM_ID  QUAD LO2  Corrtask SBMode  SBModeH  HARP Receps.      
+                                                       
+0      0       0    1      1       4       2       H00  A   BA
+1      1       0    2      1       4       2       H00  A   BA
+2      2       0    3      1       4       2       H01  A   BA
+3      3       0    4      1       4       2       H01  A   BA
+4      4       0    1      2       4       2       H02
+5      5       0    2      2       4       2       H02
+6      6       0    3      2       4       2       H03
+7      7       0    4      2       4       2       H03
+8      8       1    1      3       --      2       H04
+9      9       1    2      3       --      2       H04
+10     10      1    3      3       --      2       H05
+11     11      1    4      3       --      2       H05
+12     12      1    1      4       4       2       H06
+13     13      1    2      4       4       2       H06
+14     14      1    3      4       4       2       H07
+15     15      1    4      4       4       2       H07
+16     16      2    1      5       4       2       H08  BB  CA  DA
+17     17      2    2      5       4       2       H08  BB  CA  DA
+18     18      2    3      5       4       2       H09  BB  CA  DA
+19     19      2    4      5       4       2       H09  BB  CA  DA
+20     20      2    1      6       --      2       H10
+21     21      2    2      6       --      2       H10
+22     22      2    3      6       --      2       H11
+23     23      2    4      6       --      2       H11
+24     24      3    1      7       4       2       H12  CB  DB
+25     25      3    2      7       4       2       H12  CB  DB
+26     26      3    3      7       4       2       H13  CB  DB
+27     27      3    4      7       4       2       H13  CB  DB
+28     28      3    1      8       --      2       H14
+29     29      3    2      8       --      2       H14
+30     30      3    3      8       --      2       H15
+31     31      3    4      8       --      2       H15
