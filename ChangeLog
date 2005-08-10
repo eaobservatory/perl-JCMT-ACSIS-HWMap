@@ -1,3 +1,8 @@
+2005-08-10  Tim Jenness  <timj@jach.hawaii.edu>
+
+	* HWMap.pm (_import_string): Change format to allow multiple
+	non-HARP receptors to be associated with a single CM_ID
+
 2005-08-09  Tim Jenness  <timj@jach.hawaii.edu>
 
 	* HWMap.pm (receptor): Filter out undefined values before mapping

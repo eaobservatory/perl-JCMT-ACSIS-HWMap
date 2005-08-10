@@ -40,7 +40,7 @@ $VERSION = sprintf("%d.%03d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 Create a new mapping object. In general, there is only expected to
 be one of these objects relevant for a given hardware configuration. Despite
-that this not implemented as a singleton class.
+that this is not implemented as a singleton class.
 
   $map = new JCMT::ACSIS::HWMap( File => $wirefile );
 
@@ -231,6 +231,8 @@ the hardware mapping information and configure the object.
 
   $map->_import_string( $string );
 
+CM_ID is the primary key.
+
 =cut
 
 sub _import_string {
@@ -241,7 +243,7 @@ sub _import_string {
 
   # Simple text format. "#" is comment line
   # Columns are
-  #  Receptor ID  HARP ID  QUAD  LO2  DCM_ID  CM_ID Corrtask
+  #  CM_ID (primary) DCM_ID QUAD LO2 CorrTask HARP Receptors
   my @cm;
   for my $line (@lines) {
     chomp($line);
@@ -251,22 +253,26 @@ sub _import_string {
     # strip spaces from end of line
     $line =~ s/\s+$//;
 
-    my ($rec,$hrec, $q, $lo, $dcmid, $cmid, $task, $sbm, $hsbm) = split(/\s+/,$line);
+    # Multiple non-HARP receptors are allowed
+    my ($cmid, $dcmid, $q, $lo, $task, $sbm, $hsbm, $hrec, @recs) = split(/\s+/,$line);
 
-    # Subband mode is really HARP dependent so we can fall back
-    $sbm = ( $rec ne '--' ? 4 : '--' ) unless defined $sbm;
-    $hsbm = ( $hrec ne '--' ? 2 : '--' ) unless defined $hsbm;
+    croak "A HARP receptor was specified but the HARP sideband mode is not an integer\n"
+      if $hsbm !~ /^\d+/;
+    croak "non-HARP receptor(s) was specified but the sideband mode is not an integer\n"
+      if (@recs  && $sbm !~ /^\d+/);
 
-    # A '--' indicates that no receptor is defined
-    my @receptors = grep { $_ ne '--'} ($rec, $hrec);
-    my @sbmodes   = grep { $_ ne '--'} ($sbm, $hsbm);
+    # Assign the sideband mode to each non-HARP receptor
+    my @sbmodes = map { $sbm } @recs;
+    push(@sbmodes, $hsbm); # we have already tested validity
 
+    # All the receptors
+    push(@recs, $hrec);
 
     # CM is the unique quantity in the mapping and so can be treated
     # as the index into an array
 
     $cm[$cmid] = {
-		  RECEPTORS => \@receptors,
+		  RECEPTORS => \@recs,
 		  SB_MODES => \@sbmodes,
 		  QUADRANT => $q,
 		  LO2 => $lo,
