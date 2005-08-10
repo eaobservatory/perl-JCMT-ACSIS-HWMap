@@ -149,6 +149,9 @@ sub receptor {
 
   my @match;
   for my $cm (@map) {
+    # we can not guarantee that every CM_ID is specified
+    next unless defined $cm;
+
     my @receptors = @{ $cm->{RECEPTORS} };
 
     # need to check each in turn so that we can fix up the SB_MODE array as well

@@ -2,6 +2,7 @@
 
 	* HWMap.pm (_import_string): Change format to allow multiple
 	non-HARP receptors to be associated with a single CM_ID
+	(receptor): Allow not all CM_IDs to be specified
 
 2005-08-09  Tim Jenness  <timj@jach.hawaii.edu>
 
