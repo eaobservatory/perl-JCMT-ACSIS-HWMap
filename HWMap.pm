@@ -77,7 +77,7 @@ sub new {
 
 =item B<filename>
 
-Name of XML file used to construct the object (if any).
+Name of wiring file used to construct the object (if any).
 
 =cut
 
@@ -85,6 +85,40 @@ sub filename {
   my $self = shift;
   if (@_) { $self->{FileName} = shift; }
   return $self->{FileName};
+}
+
+=item B<map_version>
+
+Version number obtained from the wiring file.
+
+  $v = $map->map_version();
+
+=cut
+
+sub map_version {
+  my $self = shift;
+  if (@_) {
+    $self->{MapVersion} = shift;
+  }
+  return $self->{MapVersion};
+}
+
+=item B<map_date>
+
+Modification date of wiring file.
+
+  $date = $map->map_date();
+
+Date is returned as epoch seconds (for now).
+
+=cut
+
+sub map_date {
+  my $self = shift;
+  if (@_) {
+    $self->{MapDate} = shift;
+  }
+  return $self->{MapDate};
 }
 
 =item B<cm_map>
@@ -223,6 +257,11 @@ sub _import_file {
   my $contents = <$fh>;
   close($fh) or croak "Error closing mapping file $file: $!";
 
+  # Look up the modification date on the file
+  my @stat = stat( $file );
+  $self->map_date( $stat[9] );
+
+  # parse it
   $self->_import_string( $contents );
   $self->filename( $file );
 }
@@ -251,6 +290,13 @@ sub _import_string {
   for my $line (@lines) {
     chomp($line);
     next unless $line =~ /\w/;
+
+    # Spot Revision
+    if ($line =~ /\$Revision$/) {
+      $self->map_version( $1 );
+      next;
+    }
+
     next if $line =~ /^\s*\#/;
 
     # strip spaces from end of line

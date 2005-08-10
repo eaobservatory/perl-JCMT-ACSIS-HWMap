@@ -1,7 +1,8 @@
 #  -*-perl-*-
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 use File::Spec;
+use Scalar::Util qw/ looks_like_number /;
 
 require_ok( "JCMT::ACSIS::HWMap" );
 
@@ -12,6 +13,15 @@ my $file = File::Spec->catfile( "t", "wire_file.txt" );
 my $map = new JCMT::ACSIS::HWMap( File => $file );
 isa_ok( $map, "JCMT::ACSIS::HWMap" );
 
+# revision
+my $rev = $map->map_version;
+print "# Map version: $rev\n";
+print "# Last modified: ". gmtime( $map->map_date ) ."\n";
+ok( defined $rev, "Version number defined");
+ok(looks_like_number($rev), "and looks like a number");
+
+
+# Basic map functionality
 my @cm = $map->cm_map();
 
 is(@cm, 32, "Count number of CM_IDs in use");
