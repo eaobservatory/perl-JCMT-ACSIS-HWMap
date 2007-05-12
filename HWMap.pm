@@ -61,7 +61,7 @@ sub new {
   # create the base map
   my $map = bless { 
 		   CM => [],
-		  };
+		  } $class;
 
 
   $map->_import_file( $args{File} );
