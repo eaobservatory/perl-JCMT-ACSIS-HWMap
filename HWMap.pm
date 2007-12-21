@@ -61,7 +61,7 @@ sub new {
   # create the base map
   my $map = bless { 
 		   CM => [],
-		  } $class;
+		  }, $class;
 
 
   $map->_import_file( $args{File} );
@@ -291,8 +291,9 @@ sub _import_string {
     chomp($line);
     next unless $line =~ /\w/;
 
-    # Spot Revision (be careful not to make CVS think this looks like a $Revision tag)
-    if ($line =~ /\$Revision: (\d+\.\d+) /) {
+    # Spot Revision (be careful not to make subversion
+    # think this looks like a $Revision tag)
+    if ($line =~ /\$Revision: (\d+) /) {
       $self->map_version( $1 );
       next;
     }
