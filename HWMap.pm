@@ -293,7 +293,7 @@ sub _import_string {
 
     # Spot Revision (be careful not to make subversion
     # think this looks like a $Revision tag)
-    if ($line =~ /\$Revision: (\d+) /) {
+    if ($line =~ /\$Revision: (\d+\.?\d*) /) {
       $self->map_version( $1 );
       next;
     }

@@ -31,7 +31,7 @@
 # value should be present).
 
 # This CVS revision will be read by the parser.
-# $Revision$
+# $Revision: 1.00 $
 
 # $Log$
 # Revision 0.2  2005/08/10 13:55:08  timj
