@@ -43,7 +43,7 @@ my %uniq = map { $_, undef } @ids;
 
 my @corrtasks = $map->bycmid( 'CorrTask', keys %uniq);
 %uniq = map { $_, undef} @corrtasks;
-@corrtasks = keys %uniq;
+@corrtasks = sort {$a cmp $b} keys %uniq;
 is(@corrtasks, 2, "Count number of corrtasks used for RxB");
 is($corrtasks[0], 1, "First corrtask");
 is($corrtasks[1], 5, "Second corrtask");
